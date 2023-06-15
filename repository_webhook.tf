@@ -1,14 +1,14 @@
 resource "github_repository_webhook" "repository_webhook" {
-  for_each = { for hook in var.webhooks : lookup(hook, "id", hook.url) => hook }
+  count = length(var.webhooks)
 
   repository = github_repository.repository.name
-  active     = each.value.active
-  events     = each.value.events
+  active     = var.webhooks[count.index].active
+  events     = var.webhooks[count.index].events
 
   configuration {
-    url          = each.value.url
-    content_type = each.value.content_type
-    insecure_ssl = each.value.insecure_ssl
-    secret       = each.value.secret
+    url          = var.webhooks[count.index].url
+    content_type = var.webhooks[count.index].content_type
+    insecure_ssl = var.webhooks[count.index].insecure_ssl
+    secret       = var.webhooks[count.index].secret
   }
 }
