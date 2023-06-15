@@ -1,0 +1,38 @@
+---
+name: "Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Get a preview of the pending release"
+        type: boolean
+        required: true
+        default: false
+  push:
+    branches:
+      - "main"
+
+jobs:
+  semantic-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          token: "${{ steps.generate-token.outputs.token }}"
+
+      - name: Run semantic-release
+        uses: cycjimmy/semantic-release-action@v3
+        env:
+          GITHUB_TOKEN: "${{ steps.generate-token.outputs.token }}"
+        with:
+          dry_run: "${{ github.event.inputs.dry_run }}"
+          working_directory: ./.github

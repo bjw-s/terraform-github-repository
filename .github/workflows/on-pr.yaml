@@ -1,0 +1,45 @@
+---
+name: Validate Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: "${{ steps.generate-token.outputs.token }}"
+        with:
+          types: |
+            fix
+            feat
+            docs
+            ci
+            chore
+          requireScope: true
+
+      - name: Lint
+        id: ml
+        uses: oxsecurity/megalinter/flavors/terraform@v7
+        if: github.event_name == 'pull_request'
+        env:
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          GITHUB_TOKEN: "${{ steps.generate-token.outputs.token }}"
+          PRINT_ALPACA: false
+          ENABLE_LINTERS: ACTION_ACTIONLINT,GIT_GIT_DIFF,TERRAFORM_TFLINT,TERRAFORM_TERRAFORM_FMT
