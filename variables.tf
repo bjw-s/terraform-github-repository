@@ -176,6 +176,61 @@ variable "branches" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
+# Branch protection settings
+# See https://registry.terraform.io/providers/integrations/github/latest/docs/resources/branch_protection for
+# more details
+# ---------------------------------------------------------------------------------------------------------------------
+
+variable "branch_protections_v4" {
+  description = "(Optional) A list of v4 branch protections to apply to the repository. Default is []."
+  type = list(
+    object(
+      {
+        pattern                         = string
+        allows_deletions                = optional(bool, false)
+        allows_force_pushes             = optional(bool, false)
+        blocks_creations                = optional(bool, false)
+        enforce_admins                  = optional(bool, false)
+        push_restrictions               = optional(list(string), [])
+        force_push_bypassers            = optional(list(string), [])
+        require_conversation_resolution = optional(bool, false)
+        require_signed_commits          = optional(bool, false)
+        required_linear_history         = optional(bool, false)
+        required_pull_request_reviews = optional(object(
+          {
+            dismiss_stale_reviews           = optional(bool, false)
+            dismissal_restrictions          = optional(list(string), [])
+            pull_request_bypassers          = optional(list(string), [])
+            require_code_owner_reviews      = optional(bool, false)
+            required_approving_review_count = optional(number, 0)
+          }
+        ))
+        required_status_checks = optional(object(
+          {
+            strict   = optional(bool, false)
+            contexts = optional(list(string), [])
+          }
+        ))
+      }
+    )
+  )
+  validation {
+    condition = alltrue(
+      [
+        for cfg in var.branch_protections_v4 : try(
+          cfg.required_pull_request_reviews.required_approving_review_count >= 0
+          && cfg.required_pull_request_reviews.required_approving_review_count <= 6,
+          true
+        )
+      ]
+    )
+    error_message = "The value for branch_protections_v4.required_pull_request_reviews.required_approving_review_count must be between 0 and 6, inclusively."
+  }
+
+  default = []
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
 # Issue labels
 # ---------------------------------------------------------------------------------------------------------------------
 
