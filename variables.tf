@@ -53,6 +53,15 @@ variable "archive_on_destroy" {
   default     = true
 }
 
+variable "template" {
+  description = "(Optional) Template repository to use. (Default: {})"
+  type = object({
+    owner      = string
+    repository = string
+  })
+  default = null
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Repository features
 # ---------------------------------------------------------------------------------------------------------------------

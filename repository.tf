@@ -28,6 +28,16 @@ resource "github_repository" "repository" {
   squash_merge_commit_message = var.allow_squash_merge ? var.squash_merge_commit_message : null
   squash_merge_commit_title   = var.allow_squash_merge ? var.squash_merge_commit_title : null
 
+  # Template settings
+  dynamic "template" {
+    for_each = var.template != null ? [true] : []
+
+    content {
+      owner      = var.template.owner
+      repository = var.template.repository
+    }
+  }
+
   # GitHub Pages settings
   dynamic "pages" {
     for_each = var.pages != null ? [true] : []
@@ -42,10 +52,10 @@ resource "github_repository" "repository" {
     }
   }
 
-
   lifecycle {
     ignore_changes = [
-      auto_init
+      auto_init,
+      template
     ]
   }
 }
