@@ -206,6 +206,7 @@ variable "branch_protections_v4" {
         allows_force_pushes             = optional(bool, false)
         blocks_creations                = optional(bool, false)
         enforce_admins                  = optional(bool, false)
+        lock_branch                     = optional(bool, false)
         push_restrictions               = optional(list(string), [])
         force_push_bypassers            = optional(list(string), [])
         require_conversation_resolution = optional(bool, false)

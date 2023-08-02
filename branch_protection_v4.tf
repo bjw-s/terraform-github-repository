@@ -15,6 +15,7 @@ resource "github_branch_protection" "branch_protection" {
   allows_deletions                = each.value.allows_deletions
   allows_force_pushes             = each.value.allows_force_pushes
   blocks_creations                = each.value.blocks_creations
+  lock_branch                     = each.value.lock_branch
   enforce_admins                  = each.value.enforce_admins
   push_restrictions               = each.value.push_restrictions
   force_push_bypassers            = each.value.force_push_bypassers
