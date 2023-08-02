@@ -23,7 +23,7 @@ resource "github_branch_protection" "branch_protection" {
   required_linear_history         = each.value.required_linear_history
 
   dynamic "required_pull_request_reviews" {
-    for_each = each.value.required_pull_request_reviews != null ? [true] : []
+    for_each = each.value.required_pull_request_reviews != null ? [each.value.required_pull_request_reviews] : []
 
     content {
       dismiss_stale_reviews           = required_pull_request_reviews.value.dismiss_stale_reviews
@@ -36,7 +36,7 @@ resource "github_branch_protection" "branch_protection" {
   }
 
   dynamic "required_status_checks" {
-    for_each = each.value.required_status_checks != null ? [true] : []
+    for_each = each.value.required_status_checks != null ? [each.value.required_status_checks] : []
 
     content {
       strict   = required_status_checks.value.strict

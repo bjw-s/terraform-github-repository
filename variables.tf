@@ -214,18 +214,19 @@ variable "branch_protections_v4" {
         required_pull_request_reviews = optional(object(
           {
             dismiss_stale_reviews           = optional(bool, false)
+            restrict_dismissals             = optional(bool, false)
             dismissal_restrictions          = optional(list(string), [])
             pull_request_bypassers          = optional(list(string), [])
             require_code_owner_reviews      = optional(bool, false)
             required_approving_review_count = optional(number, 0)
           }
-        ))
+        ), null)
         required_status_checks = optional(object(
           {
             strict   = optional(bool, false)
             contexts = optional(list(string), [])
           }
-        ))
+        ), null)
       }
     )
   )
