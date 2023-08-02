@@ -33,6 +33,7 @@ resource "github_branch_protection" "branch_protection" {
       pull_request_bypassers          = required_pull_request_reviews.value.pull_request_bypassers
       require_code_owner_reviews      = required_pull_request_reviews.value.require_code_owner_reviews
       required_approving_review_count = required_pull_request_reviews.value.required_approving_review_count
+      require_last_push_approval      = required_pull_request_reviews.value.require_last_push_approval
     }
   }
 
