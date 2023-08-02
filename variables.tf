@@ -416,6 +416,7 @@ variable "autolink_references" {
   type = list(object({
     key_prefix          = string
     target_url_template = string
+    is_alphanumeric     = optional(bool, true)
   }))
 
   validation {
@@ -430,6 +431,7 @@ variable "autolink_references" {
   #   {
   #     key_prefix          = "TICKET-"
   #     target_url_template = "https://hello.there/TICKET?query=<num>"
+  #     is_alphanumeric     = true
   #   }
   # ]
 
