@@ -124,6 +124,12 @@ variable "delete_branch_on_merge" {
   default     = false
 }
 
+variable "allow_update_branch" {
+  description = "Set to `true` to suggest updating pull request branches."
+  type        = bool
+  default     = false
+}
+
 variable "merge_commit_title" {
   description = "(Optional) Can be `PR_TITLE` or `MERGE_MESSAGE` for a default merge commit title. (Default: 'PR_TITLE')"
   type        = string
